@@ -1,63 +1,65 @@
+import React from 'react';
 import './App.css';
-// import { ReactComponent as AddToBasketsvg } from './assets/icons/addSvg.svg';
-import sneakers3 from './assets/images/sneakers3.png';
-import sneakers1 from './assets/images/sneakers1.png';
-import sneakers2 from './assets/images/sneakers2.png';
-import sneakers4 from './assets/images/sneakers4.png';
 import { ReactComponent as SearchBlocksvg } from './assets/icons/searchBlock.svg';
 import Card from './components/card';
 import Drawer from './components/drawer/Drawer';
 import Header from './components/header/Header';
 
-const arr = [
-  {
-    id: Math.random().toString(),
-    title: 'Мужские Кроссовки Nike Blazer Mid Suede',
-    image: sneakers1,
-    price: 12999,
-  },
-  {
-    id: Math.random().toString(),
-    title: 'Мужские Кроссовки Nike Air Max 270',
-    image: sneakers2,
-    price: 12999,
-  },
-  {
-    id: Math.random().toString(),
-    title: 'Мужские Кроссовки Nike Blazer Mid Suede',
-    image: sneakers3,
-    price: 8499,
-  },
-  {
-    id: Math.random().toString(),
-    title: 'Кроссовки Puma X Aka Boku Future Rider',
-    image: sneakers4,
-    price: 8999,
-  },
-];
-
 function App() {
+  const [items, setItems] = React.useState([]);
+  const [cartItems, setCartItems] = React.useState([]);
+  const [cartOpened, setCartOpened] = React.useState(false);
+
+  React.useEffect(() => {
+    fetch('https://620df95b20ac3a4eedced1bd.mockapi.io/items')
+      .then((res) => {
+        return res.json();
+      })
+      .then((json) => {
+        setItems(json);
+      });
+  }, []);
+
+  const onAddToCart = (obj, id) => {
+    if (obj.id === id) {
+      setCartItems((prev) => [...prev, obj]);
+    }
+  };
+
+  const onDeleteFromCart = (id) => {
+    const filteredItems = cartItems.filter((item) => item.id !== id);
+    setCartItems({ filteredItems });
+  };
+
   return (
     <div className="wrapper clear">
-      <Drawer />
-      <Header />
+      {cartOpened && (
+        <Drawer
+          items={cartItems}
+          onCloseCart={() => setCartOpened(false)}
+          onDelete={onDeleteFromCart}
+        />
+      )}
+
+      <Header onClickCart={() => setCartOpened(true)} />
       <div className="content p-40">
         <div className="d-flex align-center justify-between mb-40">
           <h1>Все кроссовки</h1>
           <div className="search-block d-flex">
-            <SearchBlocksvg />
+            <SearchBlocksvg style={{ marginTop: '14px' }} />
             <input placeholder="Search..." />
           </div>
         </div>
 
-        <div className="d-flex">
-          {arr.map((item) => (
+        <div className="d-flex flex-wrap">
+          {items.map((item) => (
             <Card
               key={item.id}
               title={item.title}
-              imageUrl={item.image}
+              imageUrl={item.imageUrl}
               price={item.price}
-              onClick={() => console.log(item)}
+              onFavorite={() => console.log('clicked fav button')}
+              onPlus={(item) => onAddToCart(item)}
             />
           ))}
         </div>

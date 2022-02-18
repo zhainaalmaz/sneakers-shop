@@ -1,61 +1,46 @@
 import React from 'react';
-import sneakers1 from '../../assets/images/sneakers1.png';
 import { ReactComponent as BtnRemovesvg } from '../../assets/icons/btn-remove.svg';
 import { ReactComponent as Arrowsvg } from '../../assets/icons/arrowsvg.svg';
+import classes from './Drawer.module.css';
 
-const Drawer = () => {
+const Drawer = ({ onCloseCart, items = [], onDelete }) => {
+  const onDeleteItem = () => {
+    onDelete();
+  };
   return (
-    <div style={{ display: 'none' }} className="overlay">
+    <div>
       <div
         style={{ display: 'flex', flexDirection: 'column' }}
         className="drawer"
       >
         <h2 className=" d-flex justify-between mb-30 ">
-          Корзина <BtnRemovesvg className="removeBtn cu-p" />
+          Корзина
+          <BtnRemovesvg onClick={onCloseCart} className="removeBtn cu-p" />
         </h2>
 
         <div className="items">
-          <div className="cartItem d-flex align-center mb-20">
-            <img
-              className="mr-20"
-              width={70}
-              height={70}
-              src={sneakers1}
-              alt="sneakers1"
-            />
-            <div className="mr-20">
-              <p className="mb-5">Мужские Кроссовки Nike Blazer Mid Suede</p>
-              <b>12 999 руб.</b>
+          {items.map((obj) => (
+            <div key={obj.id} className="cartItem d-flex align-center mb-20">
+              <div>
+                <img className={classes.img} src={obj.imageUrl} alt="/" />
+              </div>
+              <div className="mr-20 flex">
+                <p className="mb-5">{obj.title}</p>
+                <b>{obj.price} руб.</b>
+              </div>
+              <BtnRemovesvg className="removeBtn" onClick={onDeleteItem} />
             </div>
-            <BtnRemovesvg className="removeBtn" />
-          </div>
-
-          <div className="cartItem d-flex align-center">
-            <img
-              className="mr-20"
-              width={70}
-              height={70}
-              src={sneakers1}
-              alt="sneakers1"
-            />
-            <div className="mr-20">
-              <p className="mb-5">Мужские Кроссовки Nike Blazer Mid Suede</p>
-              <b>12 999 руб.</b>
-            </div>
-            <BtnRemovesvg className="removeBtn" />
-          </div>
+          ))}
         </div>
 
         <div className="cartTotalBlock">
           <ul>
             <li>
               <span>Итого: </span>
-              <div></div>
               <b>21 498 руб. </b>
             </li>
             <li>
               <span>Налог 5%: </span>
-              <div></div>
               <b>1074 руб. </b>
             </li>
           </ul>

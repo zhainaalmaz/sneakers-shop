@@ -8,7 +8,6 @@ import { useCart } from '../hooks/useCart';
 
 const Header = (props) => {
   const { totalPrice } = useCart();
-
   return (
     <header className="d-flex justify-between align-center p-40">
       <Link to="/">
@@ -24,9 +23,9 @@ const Header = (props) => {
         <li onClick={props.onClickCart} className="mr-30 cu-p">
           <img src={basket} alt="Корзина" />
 
-          <span>{totalPrice}</span>
+          <span>{Number(totalPrice)} руб.</span>
         </li>
-        <li className="mr-10 cu-p">
+        <li className="mr-20 cu-p">
           <Link to="/favorites">
             <img src={likeBtn} alt="Закладки" />
           </Link>

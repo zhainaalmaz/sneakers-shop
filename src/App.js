@@ -13,15 +13,15 @@ import Orders from './pages/Orders';
 function App() {
   const [items, setItems] = React.useState([]);
   const [cartItems, setCartItems] = React.useState([]);
+  const [favorites, setFavorites] = React.useState([]);
   const [cartOpened, setCartOpened] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState('');
-  const [favorites, setFavorites] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
     async function fetchData() {
       try {
-        const [cartResponse, favoriteResponse, itemResponse] =
+        const [cartResponse, favoritesResponse, itemResponse] =
           await Promise.all([
             axios.get('https://620df95b20ac3a4eedced1bd.mockapi.io/cart'),
             axios.get('https://620df95b20ac3a4eedced1bd.mockapi.io/favorites'),
@@ -31,7 +31,7 @@ function App() {
         setIsLoading(false);
         setCartItems(cartResponse.data);
 
-        setFavorites(favoriteResponse.data);
+        setFavorites(favoritesResponse.data);
         setItems(itemResponse.data);
       } catch (error) {
         alert('Ошибка при запросе данных');
@@ -111,7 +111,7 @@ function App() {
       }
     } catch (error) {
       alert('Не удалось добавить в фавориты');
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -142,10 +142,10 @@ function App() {
 
         <Header onClickCart={() => setCartOpened(true)} />
 
-        <Route path="" exact>
+        <Route path="/" exact>
           <Home
             items={items}
-            favorites={favorites}
+            cartItems={cartItems}
             searchValue={searchValue}
             setSearchValue={setSearchValue}
             onChangeSearchInput={onChangeSearchInput}
@@ -155,11 +155,11 @@ function App() {
           />
         </Route>
 
-        <Route path="favorites" exact>
+        <Route path="/favorites" exact>
           <Favorites />
         </Route>
 
-        <Route path="orders" exact>
+        <Route path="/orders" exact>
           <Orders />
         </Route>
       </div>

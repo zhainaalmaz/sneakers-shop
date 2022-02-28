@@ -11,7 +11,7 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 function Drawer({ onCloseCart, onRemove, items = [], opened }) {
   const { cartItems, setCartItems, totalPrice } = useCart();
   const [orderId, setOrderId] = React.useState(null);
-  const [isOrderComplete, setIsOrderComplete] = React.useState(false);
+  const [isOrderCompleted, setIsOrderCompleted] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const onClickOrder = async () => {
@@ -24,7 +24,7 @@ function Drawer({ onCloseCart, onRemove, items = [], opened }) {
         }
       );
       setOrderId(data.id);
-      setIsOrderComplete(true);
+      setIsOrderCompleted(true);
       setCartItems([]);
 
       for (let i = 0; i < cartItems.length; i++) {
@@ -106,14 +106,14 @@ function Drawer({ onCloseCart, onRemove, items = [], opened }) {
           </div>
         ) : (
           <Info
-            title={isOrderComplete ? 'Заказ оформлен!' : 'Корзина пустая'}
+            title={isOrderCompleted ? 'Заказ оформлен!' : 'Корзина пустая'}
             description={
-              isOrderComplete
+              isOrderCompleted
                 ? `Ваш заказ #${orderId} скоро будет передан курьерской доставке`
                 : 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'
             }
             image={
-              isOrderComplete ? 'img/complete-order.jpg' : 'img/empty-cart.jpg'
+              isOrderCompleted ? 'img/complete-order.jpg' : 'img/empty-cart.jpg'
             }
           />
         )}
